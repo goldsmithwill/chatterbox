@@ -23,13 +23,20 @@
 				onclick="underlineText()"></input>
 		</div>
 
-		<form id="uploadForm" action="UploadDownloadFileServlet" method="post"
+		<!-- 	<form id="uploadForm" action="UploadDownloadFileServlet" method="post"
 			enctype="multipart/form-data">
 			<input name="fileName" type="file"> <br> <input
 				type="submit" value="Upload">
+		</form> -->
+
+
+
+		<form id="autoCompleteForm" action="WordServlet" method="post"
+			enctype="multipart/form-data">
+			<input id="textArea" name="textArea" type="text"></input> <input
+				type="submit" value="Auto Complete">
 		</form>
 
-		<textarea id="textArea" rows="15" cols="56"></textarea>
 	</div>
 </body>
 </html>
