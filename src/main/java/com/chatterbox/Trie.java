@@ -1,121 +1,84 @@
 package com.chatterbox;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Trie {
-	private TrieNode root;
 
-	public Trie() throws FileNotFoundException {
-		root = new TrieNode();
+	protected final Map<Character, Trie> children;
+	protected String value;
+	protected boolean terminal = false;
 
-		// adding words.txt words to the trie
-		addWords();
+	public Trie() {
+		this(null);
 	}
 
-	public static void main(String[] args) {
-		try {
-			Trie t = new Trie();
-			t.startsWith("hi");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	private Trie(String value) {
+		this.value = value;
+		children = new HashMap<Character, Trie>();
+	}
+
+	protected void add(char c) {
+		String val;
+		if (this.value == null) {
+			val = Character.toString(c);
+		} else {
+			val = this.value + c;
 		}
-
+		children.put(c, new Trie(val));
 	}
 
-	// addWords method to add contents of words.txt file to the trie
-	public void addWords() throws FileNotFoundException {
-		// creating scanner for words.txt file
-		Scanner scanner = new Scanner(
-				new File(new File(new File("").getAbsolutePath()) + "/src/main/resources/words.txt"));
-
-		// while loop to go through scanner
-		while (scanner.hasNextLine()) {
-			String nextLine = scanner.nextLine();
-
-			// adding word to the trie
-			insert(nextLine);
-		}
-
-		// closing scanner
-		scanner.close();
-
-	}
-
-	// Inserts a word into the trie
 	public void insert(String word) {
-		TrieNode n = root;
-		for (int i = 0; i < word.length(); i++) {
-			char c = word.charAt(i);
-			int index = c - 'a';
-
-			if (n.arr[index] == null) {
-				TrieNode temp = new TrieNode();
-				n.arr[index] = temp;
-				n = temp;
-			} else {
-				n = n.arr[index];
+		if (word == null) {
+			throw new IllegalArgumentException("Cannot add null to a Trie");
+		}
+		Trie node = this;
+		for (char c : word.toCharArray()) {
+			if (!node.children.containsKey(c)) {
+				node.add(c);
 			}
+			node = node.children.get(c);
 		}
-		n.isEnd = true;
+		node.terminal = true;
 	}
 
-	// Returns if the word is in the trie
-	public boolean search(String word) {
-		TrieNode n = searchNode(word);
-		if (n == null) {
-			return false;
-		} else {
-			if (n.isEnd)
-				return true;
-		}
-
-		return false;
-	}
-
-	// Returns if there is any word in the trie
-	// that starts with the given prefix.
-	public boolean startsWith(String prefix) {
-		TrieNode n = searchNode(prefix);
-
-		if (n == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	// getStartsWith method
-	// returns all words in the Trie that start with a specific prefix
-	public List<String> getStartsWith(String prefix) {
-		// startsWithList to be returned
-		List<String> startsWithList = new ArrayList<String>();
-
-		TrieNode n = searchNode(prefix);
-
-		return startsWithList;
-
-	}
-
-	public TrieNode searchNode(String s) {
-		TrieNode n = root;
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			int index = c - 'a';
-			if (n.arr[index] != null) {
-				n = n.arr[index];
-			} else {
-				return null;
+	public String find(String word) {
+		Trie node = this;
+		for (char c : word.toCharArray()) {
+			if (!node.children.containsKey(c)) {
+				return "";
 			}
+			node = node.children.get(c);
 		}
-
-		if (n == root)
-			return null;
-
-		return n;
+		return node.value;
 	}
 
+	public Collection<String> autoComplete(String prefix) {
+		Trie node = this;
+		for (char c : prefix.toCharArray()) {
+			if (!node.children.containsKey(c)) {
+				return Collections.emptyList();
+			}
+			node = node.children.get(c);
+		}
+		return node.allPrefixes();
+	}
+
+	protected Collection<String> allPrefixes() {
+		List<String> results = new ArrayList<String>();
+		if (this.terminal) {
+			results.add(this.value);
+		}
+		for (Entry<Character, Trie> entry : children.entrySet()) {
+			Trie child = entry.getValue();
+			Collection<String> childPrefixes = child.allPrefixes();
+			results.addAll(childPrefixes);
+		}
+		return results;
+	}
 }

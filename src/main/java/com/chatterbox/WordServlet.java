@@ -30,13 +30,13 @@ public class WordServlet extends HttpServlet {
 		// creating Trie object
 		Trie t = new Trie();
 
-		if (t.search(word)) {
-			completeWordList.add(word);
-		}
-
-		if (t.startsWith(word)) {
-
-		}
+		// if (t.search(word)) {
+		// completeWordList.add(word);
+		// }
+		//
+		// if (t.startsWith(word)) {
+		//
+		// }
 
 		// // Set response content type
 		// response.setContentType("text/html");
