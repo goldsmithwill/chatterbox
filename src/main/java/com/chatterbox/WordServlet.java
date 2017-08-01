@@ -2,22 +2,41 @@ package com.chatterbox;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//WordServlet for auto complete function
 public class WordServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		// Trie t = new Trie();
-
+		// getting text from textArea form input element
 		String text = request.getParameter("textArea");
 
-		System.out.println(text);
+		// converting text to array of each word
+		String[] textArray = text.split(" ");
 
-		// if()
+		// getting last word of text to use for auto complete
+		String word = textArray[textArray.length - 1];
+
+		// creating completeWordList ArrayList
+		// that is the list of valid words the auto complete function finds
+		List<String> completeWordList = new ArrayList<String>();
+
+		// creating Trie object
+		Trie t = new Trie();
+
+		if (t.search(word)) {
+			completeWordList.add(word);
+		}
+
+		if (t.startsWith(word)) {
+
+		}
 
 		// // Set response content type
 		// response.setContentType("text/html");

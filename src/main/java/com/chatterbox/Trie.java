@@ -2,6 +2,8 @@ package com.chatterbox;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Trie {
@@ -17,9 +19,11 @@ public class Trie {
 	public static void main(String[] args) {
 		try {
 			Trie t = new Trie();
+			t.startsWith("hi");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	// addWords method to add contents of words.txt file to the trie
@@ -43,29 +47,29 @@ public class Trie {
 
 	// Inserts a word into the trie
 	public void insert(String word) {
-		TrieNode p = root;
+		TrieNode n = root;
 		for (int i = 0; i < word.length(); i++) {
 			char c = word.charAt(i);
 			int index = c - 'a';
 
-			if (p.arr[index] == null) {
+			if (n.arr[index] == null) {
 				TrieNode temp = new TrieNode();
-				p.arr[index] = temp;
-				p = temp;
+				n.arr[index] = temp;
+				n = temp;
 			} else {
-				p = p.arr[index];
+				n = n.arr[index];
 			}
 		}
-		p.isEnd = true;
+		n.isEnd = true;
 	}
 
 	// Returns if the word is in the trie
 	public boolean search(String word) {
-		TrieNode p = searchNode(word);
-		if (p == null) {
+		TrieNode n = searchNode(word);
+		if (n == null) {
 			return false;
 		} else {
-			if (p.isEnd)
+			if (n.isEnd)
 				return true;
 		}
 
@@ -75,29 +79,43 @@ public class Trie {
 	// Returns if there is any word in the trie
 	// that starts with the given prefix.
 	public boolean startsWith(String prefix) {
-		TrieNode p = searchNode(prefix);
-		if (p == null) {
+		TrieNode n = searchNode(prefix);
+
+		if (n == null) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 
+	// getStartsWith method
+	// returns all words in the Trie that start with a specific prefix
+	public List<String> getStartsWith(String prefix) {
+		// startsWithList to be returned
+		List<String> startsWithList = new ArrayList<String>();
+
+		TrieNode n = searchNode(prefix);
+
+		return startsWithList;
+
+	}
+
 	public TrieNode searchNode(String s) {
-		TrieNode p = root;
+		TrieNode n = root;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			int index = c - 'a';
-			if (p.arr[index] != null) {
-				p = p.arr[index];
+			if (n.arr[index] != null) {
+				n = n.arr[index];
 			} else {
 				return null;
 			}
 		}
 
-		if (p == root)
+		if (n == root)
 			return null;
 
-		return p;
+		return n;
 	}
+
 }

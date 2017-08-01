@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <script src="chatterbox.js"></script>
@@ -12,15 +12,15 @@
 	<div id="chatBox">
 		<div id="chatFormatButtons">
 			<!-- bold button -->
-			<input id="boldButton" type="button" value="B" onclick="boldText()"></input>
+			<input id="boldButton" type="button" value="B" onclick="boldText()">
 
 			<!-- italicize button -->
 			<input id="italicizeButton" type="button" value="I"
-				onclick="italicizeText()"></input>
+				onclick="italicizeText()">
 
 			<!-- underline button -->
 			<input id="underlineButton" type="button" value="U"
-				onclick="underlineText()"></input>
+				onclick="underlineText()">
 		</div>
 
 		<!-- 	<form id="uploadForm" action="UploadDownloadFileServlet" method="post"
@@ -32,8 +32,8 @@
 
 
 		<form id="autoCompleteForm" action="WordServlet" method="post"
-			enctype="multipart/form-data">
-			<input id="textArea" name="textArea" type="text"></input> <input
+			enctype="application/x-www-form-urlencoded">
+			<input id="textArea" name="textArea" type="text"> <input
 				type="submit" value="Auto Complete">
 		</form>
 
